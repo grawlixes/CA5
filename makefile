@@ -11,9 +11,8 @@ $(TARGET):	main.o
 
 # Specify how the object files should be created from source files
 main.o:	main.cpp
-	g++ -c main.cpp
 	g++ -c RequirementsLL.cpp
-
+	g++ -c main.cpp
 # Specify the object files and executables that are generated
 # and need to be removed to re-compile the whole thing
 clean:

@@ -19,4 +19,4 @@ clean:
 	rm -f *.o $(TARGET)
 
 run:	$(TARGET)
-	./$(TARGET)
+	./$(TARGET) requirements.txt offerings.txt schedule.txt

@@ -13,7 +13,7 @@ int main(int argc, char ** argv){
 	ifstream reqFile(argv[1]);
 	if(reqFile.is_open()){
 		while(getline(reqFile,line)){
-			cout <<"start" << line << "end"<< endl;
+			//cout <<"start" << line << "end"<< endl;
 			if(line.substr(0,5) == "TOTAL"){
 				credLimit = stoi(line.substr(6,3));
 				cout << "credlimit: " << credLimit << endl;
@@ -34,7 +34,7 @@ int main(int argc, char ** argv){
 						classIdx += 6;
 					}
 				}else if(line.substr(13,1) == "M"){
-					cout << line.substr(7,5) << "is mandatory!" << endl;
+					cout << line.substr(7,5) << " is mandatory!" << endl;
 				}
 			}
 		}

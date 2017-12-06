@@ -5,6 +5,8 @@
 using namespace std;
 //using namespace __gnu_cxx;
 
+unordered_map<string, string> create_offerings_map();
+
 int main(int argc, char ** argv){
 	string line;
 	int credLimit;

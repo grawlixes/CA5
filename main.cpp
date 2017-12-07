@@ -34,7 +34,7 @@ int main(int argc, char ** argv){
 				}else if(line.substr(13,1) == "O"){
 					while(classIdx < line.length()){
 						reqLL.insert_requirement(line.substr(classIdx,5),line.substr(13,1));
-						cout << line.substr(classIdx,5) << " is a prereq" << endl;
+						cout << line.substr(classIdx,5) << " is an optional prereq" << endl;
 						classIdx += 6;
 					}
 				}else if(line.substr(13,1) == "M"){
@@ -58,6 +58,7 @@ int main(int argc, char ** argv){
 			string course_name = line.substr(0, 5);
 			string credits = line.substr(6);
 
+			cout << "offerings_graph[" << course_name << "] = " << credits << endl;
 			offerings_graph[course_name] = credits;
 		}
 
@@ -65,10 +66,11 @@ int main(int argc, char ** argv){
 	} else {
 		cout << "Could not open " << argv[2] << endl;
 	}
+	/*
 	cout << endl;
-
 	unordered_map<string, string>::iterator it;
 	for (it = offerings_graph.begin() ; it != offerings_graph.end() ; it++) {
 		cout << it->first << endl;
 	}
+	*/
 }

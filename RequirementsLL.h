@@ -11,6 +11,7 @@ class RequirementsLLNode {
 			this->course_status = course_status;
 			this->next_requirement = nullptr;
 		}
+		RequirementsLLNode(const RequirementsLLNode &other);
 
 		std::string get_course_name() const;
 		std::string get_course_status() const;
@@ -32,6 +33,7 @@ class RequirementsLL {
 		RequirementsLL() {
 			first_requirement = nullptr;
 		}
+		RequirementsLL(const RequirementsLL &other);
 
 		RequirementsLLNode * get_first_requirement() const;
 		void set_first_requirement(std::string course_name, 

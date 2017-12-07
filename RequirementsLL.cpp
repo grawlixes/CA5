@@ -1,5 +1,11 @@
 #include "RequirementsLL.h"
 
+RequirementsLLNode::RequirementsLLNode(const RequirementsLLNode &other){
+	this->course_name = other.get_course_name();
+	this->course_status = other.get_course_status();
+	this->next_requirement = other.get_next_requirement();
+}
+
 std::string RequirementsLLNode::get_course_name() const {
 	return this->course_name;
 }
@@ -55,6 +61,16 @@ void RequirementsLL::insert_requirement(std::string course_name,
 	}
 }
 
+RequirementsLL::RequirementsLL(const RequirementsLL &other){
+	RequirementsLLNode * pointer = other.get_first_requirement();
+
+	while (pointer) {
+		this->insert_requirement(pointer->get_course_name(), 
+					 pointer->get_course_status());
+		pointer = pointer->get_next_requirement();
+	}
+
+}
 
 RequirementsLL * RequirementsLL::operator=(const RequirementsLL & rhs) {
 	this->~RequirementsLL();

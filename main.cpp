@@ -4,7 +4,7 @@
 
 using namespace std;
 
-unordered_map<string, string> create_offerings_map();
+unordered_map<string, string> create_offerings_map(string offerings);
 
 int main(int argc, char ** argv){
 	string line;
@@ -47,4 +47,28 @@ int main(int argc, char ** argv){
 		}
 		reqFile.close();
 	}else cout << "Unable to open " << argv[1] << endl;
+
+	unordered_map<string, string> offerings_graph;
+
+	ifstream offerings_file(argv[2]);
+	line = "";
+	
+	if (offerings_file.is_open()) {
+		while (getline(offerings_file, line)) {
+			string course_name = line.substr(0, 5);
+			string credits = line.substr(6);
+
+			offerings_graph[course_name] = credits;
+		}
+
+		offerings_file.close();
+	} else {
+		cout << "Could not open " << argv[2] << endl;
+	}
+	cout << endl;
+
+	unordered_map<string, string>::iterator it;
+	for (it = offerings_graph.begin() ; it != offerings_graph.end() ; it++) {
+		cout << it->first << endl;
+	}
 }

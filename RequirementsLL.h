@@ -12,12 +12,14 @@ class RequirementsLLNode {
 			this->next_requirement = nullptr;
 		}
 
-		std::string get_course_name();
-		std::string get_course_status();
+		std::string get_course_name() const;
+		std::string get_course_status() const;
 
-		RequirementsLLNode * get_next_requirement();
+		RequirementsLLNode * get_next_requirement() const;
 		void set_next_requirement(std::string course_name, 
 					  std::string course_status);
+
+		RequirementsLLNode * operator=(const RequirementsLLNode & rhs);
 	private:
 		std::string course_name;
 		std::string course_status;
@@ -31,12 +33,14 @@ class RequirementsLL {
 			first_requirement = nullptr;
 		}
 
-		RequirementsLLNode * get_first_requirement();
+		RequirementsLLNode * get_first_requirement() const;
 		void set_first_requirement(std::string course_name, 
 					   std::string course_status);
 
 		void insert_requirement(std::string course_name, 
 					std::string course_status);
+
+		RequirementsLL * operator=(const RequirementsLL & rhs);	
 
 		~RequirementsLL();
 	private:

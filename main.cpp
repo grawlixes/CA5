@@ -69,9 +69,17 @@ int main(int argc, char ** argv){
 
 	ifstream schedule_file(argv[3]);
 	line = "";
-	/*
-	cout << endl;
-	unordered_map<string, string>::iterator it;
-	for (it = offerings_graph.begin() ; it != offerings_graph.end() ; it++) {
-		cout << it->first << endl;
+	vector<string> schedule;
+	if (schedule_file.is_open()){
+		while(getline(schedule_file,line)){
+			schedule.push_back(line);
+		}
+		schedule_file.close();
 	}
+	for(int i = 0; i < schedule.size(); i++){
+		cout << schedule[i] << endl;
+	}
+
+	}
+
+

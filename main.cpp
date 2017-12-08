@@ -66,11 +66,12 @@ int main(int argc, char ** argv){
 	} else {
 		cout << "Could not open " << argv[2] << endl;
 	}
+
+	ifstream schedule_file(argv[3]);
+	line = "";
 	/*
 	cout << endl;
 	unordered_map<string, string>::iterator it;
 	for (it = offerings_graph.begin() ; it != offerings_graph.end() ; it++) {
 		cout << it->first << endl;
 	}
-	*/
-}

@@ -76,10 +76,40 @@ int main(int argc, char ** argv){
 		}
 		schedule_file.close();
 	}
+	//order the semesters
+	string temp;
+	for(int i = 0; i < schedule.size(); i++){
+		for(int j = i+1; j < schedule.size(); j++){
+			if(schedule[i].substr(1,4) == schedule[j].substr(1,4)){
+				if(schedule[i][0] < schedule[j][0]){
+					temp = schedule[i];
+					schedule[i] = schedule[j];
+					schedule[j] = temp;
+				}
+			}else{
+				if(schedule[i].substr(1,4) > schedule[j].substr(1,4)){
+					temp = schedule[i];
+					schedule[i] = schedule[j];
+					schedule[j] = temp;
+				}
+			}
+		}
+	}
 	for(int i = 0; i < schedule.size(); i++){
 		cout << schedule[i] << endl;
 	}
-
+	int credCount;
+	bool preMet, mandatory, tagMet;
+	for(int i = 0; i < schedule.size(); i++){
+		int classIdx = 6;
+		while(classIdx < schedule[i].length()){
+			int graphIdx = 0;
+			while(graphIdx < reqGraph.size() && reqGraph[graphIdx].get_first_requirement()->get_course_name() != schedule[i].substr(classIdx,5)){
+				cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
+				graphIdx++;
+			}
+			cout << graphIdx << endl;
+			classIdx += 6;
+		}
 	}
-
-
+}

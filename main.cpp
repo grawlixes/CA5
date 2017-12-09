@@ -148,7 +148,7 @@ int main(int argc, char ** argv){
 	for(int i = 0; i < schedule.size(); i++){
 		cout << schedule[i] << endl;
 	}
-	int credCount;
+	int credCount = 0;
 	bool preMet, mandatory, tagMet;
 	preMet = true;
 	mandatory = true;
@@ -162,20 +162,28 @@ int main(int argc, char ** argv){
 			while(graphIdx < reqGraph.size() && reqGraph[graphIdx].get_first_requirement()->get_course_name() != schedule[i].substr(classIdx,5)){
 				graphIdx++;
 			}
-			RequirementsLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
-			if(myPtr->get_course_status() == "R"){
-				while(myPtr->get_next_requirement()){
-					if(find(takenClasses.begin(), takenClasses.end(), myPtr->get_next_requirement()->get_course_name()) == takenClasses.end()) {
-						preMet = false;
-						cout << "Prerequisite " << myPtr->get_next_requirement()->get_course_name() << " for " << reqGraph[graphIdx].get_first_requirement()->get_course_name() << " not yet taken"<< endl;
-						break;
+			//if the graph index is less than the size of the graph, the class is a requirement
+			if(graphIdx < reqGraph.size()){
+				RequirementsLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
+				//cout << "AHHHHHHHHHH " << schedule[i].substr(classIdx,5) << endl;
+				if(myPtr->get_course_status() == "R"){
+					while(myPtr->get_next_requirement()){
+						if(find(takenClasses.begin(), takenClasses.end(), myPtr->get_next_requirement()->get_course_name()) == takenClasses.end()) {
+							preMet = false;
+							cout << "Prerequisite " << myPtr->get_next_requirement()->get_course_name() << " for " << reqGraph[graphIdx].get_first_requirement()->get_course_name() << " not yet taken"<< endl;
+							break;
+						}
+						myPtr = myPtr->get_next_requirement();
 					}
 				}
 			}
+			credCount += (offerings_graph[schedule[i].substr(classIdx,5)][0] - '0');
 			//cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
 			//cout << "graphIdx: " << graphIdx << endl;
+			semesterClasses.push_back(schedule[i].substr(classIdx,5));
 			classIdx += 6;
 		}
+		takenClasses.insert(takenClasses.end(), semesterClasses.begin(), semesterClasses.end());
 		if(!preMet){
 			break;
 		}

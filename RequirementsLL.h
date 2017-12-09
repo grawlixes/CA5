@@ -21,6 +21,8 @@ class RequirementsLLNode {
 					  std::string course_status);
 
 		RequirementsLLNode * operator=(const RequirementsLLNode & rhs);
+
+		// 0th el is the number, 1st el is how many of that number are needed 
 		int choose [2] = {0, 0};
 	private:
 		std::string course_name;

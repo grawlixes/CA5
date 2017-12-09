@@ -135,14 +135,23 @@ int main(int argc, char ** argv){
 	}
 	int credCount;
 	bool preMet, mandatory, tagMet;
+	vector<string> takenClasses;
 	for(int i = 0; i < schedule.size(); i++){
 		int classIdx = 6;
-		while(classIdx < schedule[i].length()){
+		vector<string> semesterClasses;
+		while(classIdx < schedule[i].length() && preMet){
 			int graphIdx = 0;
 			while(graphIdx < reqGraph.size() && reqGraph[graphIdx].get_first_requirement()->get_course_name() != schedule[i].substr(classIdx,5)){
-				cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
 				graphIdx++;
 			}
+			RequirementLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
+			if(myPtr.get_course_status() == "R"){
+				while(myPtr.get_next_requirement().get_next_requirement()){
+					if(myPtr.get_next_requirement().get_course_name == )
+						myPtr = myPtr.get_next_requirement()
+				}
+			}
+			//cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
 			cout << graphIdx << endl;
 			classIdx += 6;
 		}

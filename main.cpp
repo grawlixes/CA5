@@ -4,14 +4,13 @@
 
 using namespace std;
 
-unordered_map<string, string> create_offerings_map(string offerings);
-
 int main(int argc, char ** argv){
 	string line;
 	int credLimit;
 	unordered_map<string, int> credTags;
 	vector<RequirementsLL> reqGraph;
 	ifstream reqFile(argv[1]);
+	int count = 1;
 	if(reqFile.is_open()){
 		while(getline(reqFile,line)){
 			if(line.substr(0,5) == "TOTAL"){
@@ -42,7 +41,43 @@ int main(int argc, char ** argv){
 				}
 				reqGraph.push_back(reqLL);
 			}else if(line.substr(0,6) == "CHOOSE"){
-			//This still needs to be done
+				string classes = line.substr(7);
+				char number = classes[0];
+				classes = classes.substr(2);
+
+				vector<string> options;
+
+				while (classes.length() >= 5) {
+					if (classes.length() != 5) {
+						options.push_back(classes.substr(0, 5));
+						classes = classes.substr(6);
+					} else {
+						options.push_back(classes);
+						classes = "";
+					}
+				}
+
+				int index;
+				// O(n) update time
+				for (index = 0 ; index < reqGraph.size() ; index++) {
+					int i;
+					for (i = 0 ; i < options.size() ; i++) {
+						if (reqGraph[index].get_first_requirement()->get_course_name() ==
+						   options[i]) {
+							reqGraph[index].get_first_requirement()->choose[0] = count;
+							reqGraph[index].get_first_requirement()->choose[1] = number - '0';
+							options.erase(options.begin()+i);
+						}
+					}
+				}
+
+				for (index = 0 ; index < reqGraph.size() ; index++) {
+					cout << reqGraph[index].get_first_requirement()->get_course_name()
+						<< " " << reqGraph[index].get_first_requirement()->choose[0]
+						<< ", " << reqGraph[index].get_first_requirement()->choose[1] << endl;
+				}
+
+				count++;
 			}
 		}
 		reqFile.close();
@@ -69,47 +104,4 @@ int main(int argc, char ** argv){
 
 	ifstream schedule_file(argv[3]);
 	line = "";
-	vector<string> schedule;
-	if (schedule_file.is_open()){
-		while(getline(schedule_file,line)){
-			schedule.push_back(line);
-		}
-		schedule_file.close();
-	}
-	//order the semesters
-	string temp;
-	for(int i = 0; i < schedule.size(); i++){
-		for(int j = i+1; j < schedule.size(); j++){
-			if(schedule[i].substr(1,4) == schedule[j].substr(1,4)){
-				if(schedule[i][0] < schedule[j][0]){
-					temp = schedule[i];
-					schedule[i] = schedule[j];
-					schedule[j] = temp;
-				}
-			}else{
-				if(schedule[i].substr(1,4) > schedule[j].substr(1,4)){
-					temp = schedule[i];
-					schedule[i] = schedule[j];
-					schedule[j] = temp;
-				}
-			}
-		}
-	}
-	for(int i = 0; i < schedule.size(); i++){
-		cout << schedule[i] << endl;
-	}
-	int credCount;
-	bool preMet, mandatory, tagMet;
-	for(int i = 0; i < schedule.size(); i++){
-		int classIdx = 6;
-		while(classIdx < schedule[i].length()){
-			int graphIdx = 0;
-			while(graphIdx < reqGraph.size() && reqGraph[graphIdx].get_first_requirement()->get_course_name() != schedule[i].substr(classIdx,5)){
-				cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
-				graphIdx++;
-			}
-			cout << graphIdx << endl;
-			classIdx += 6;
-		}
-	}
 }

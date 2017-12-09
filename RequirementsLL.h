@@ -14,13 +14,14 @@ class RequirementsLLNode {
 		RequirementsLLNode(const RequirementsLLNode &other);
 
 		std::string get_course_name() const;
-		std::string get_course_status() const;
+		std::string get_course_status() const; 
 
 		RequirementsLLNode * get_next_requirement() const;
 		void set_next_requirement(std::string course_name, 
 					  std::string course_status);
 
 		RequirementsLLNode * operator=(const RequirementsLLNode & rhs);
+		int choose [2] = {0, 0};
 	private:
 		std::string course_name;
 		std::string course_status;

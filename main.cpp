@@ -4,14 +4,13 @@
 
 using namespace std;
 
-unordered_map<string, string> create_offerings_map(string offerings);
-
 int main(int argc, char ** argv){
 	string line;
 	int credLimit;
 	unordered_map<string, int> credTags;
 	vector<RequirementsLL> reqGraph;
 	ifstream reqFile(argv[1]);
+	int count = 1;
 	if(reqFile.is_open()){
 		while(getline(reqFile,line)){
 			if(line.substr(0,5) == "TOTAL"){
@@ -42,7 +41,43 @@ int main(int argc, char ** argv){
 				}
 				reqGraph.push_back(reqLL);
 			}else if(line.substr(0,6) == "CHOOSE"){
-			//This still needs to be done
+				string classes = line.substr(7);
+				char number = classes[0];
+				classes = classes.substr(2);
+
+				vector<string> options;
+
+				while (classes.length() >= 5) {
+					if (classes.length() != 5) {
+						options.push_back(classes.substr(0, 5));
+						classes = classes.substr(6);
+					} else {
+						options.push_back(classes);
+						classes = "";
+					}
+				}
+
+				int index;
+				// O(n) update time
+				for (index = 0 ; index < reqGraph.size() ; index++) {
+					int i;
+					for (i = 0 ; i < options.size() ; i++) {
+						if (reqGraph[index].get_first_requirement()->get_course_name() ==
+						   options[i]) {
+							reqGraph[index].get_first_requirement()->choose[0] = count;
+							reqGraph[index].get_first_requirement()->choose[1] = number - '0';
+							options.erase(options.begin()+i);
+						}
+					}
+				}
+
+				for (index = 0 ; index < reqGraph.size() ; index++) {
+					cout << reqGraph[index].get_first_requirement()->get_course_name()
+						<< " " << reqGraph[index].get_first_requirement()->choose[0]
+						<< ", " << reqGraph[index].get_first_requirement()->choose[1] << endl;
+				}
+
+				count++;
 			}
 		}
 		reqFile.close();
@@ -69,9 +104,4 @@ int main(int argc, char ** argv){
 
 	ifstream schedule_file(argv[3]);
 	line = "";
-	/*
-	cout << endl;
-	unordered_map<string, string>::iterator it;
-	for (it = offerings_graph.begin() ; it != offerings_graph.end() ; it++) {
-		cout << it->first << endl;
-	}
+}

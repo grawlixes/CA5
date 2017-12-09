@@ -9,6 +9,8 @@ int main(int argc, char ** argv){
 	int credLimit;
 	unordered_map<string, int> credTags;
 	vector<RequirementsLL> reqGraph;
+	// has as many elements as there are "CHOOSE" lines
+	vector<int> choose_options;
 	ifstream reqFile(argv[1]);
 	int count = 1;
 	if(reqFile.is_open()){
@@ -43,6 +45,7 @@ int main(int argc, char ** argv){
 			}else if(line.substr(0,6) == "CHOOSE"){
 				string classes = line.substr(7);
 				char number = classes[0];
+				choose_options.push_back(number - '0');
 				classes = classes.substr(2);
 
 				vector<string> options;
@@ -84,7 +87,6 @@ int main(int argc, char ** argv){
 	}else cout << "Unable to open " << argv[1] << endl;
 
 	unordered_map<string, string> offerings_graph;
-
 	ifstream offerings_file(argv[2]);
 	line = "";
 	

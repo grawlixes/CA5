@@ -76,6 +76,9 @@ int main(int argc, char ** argv){
 				for (index = 0 ; index < reqGraph.size() ; index++) {
 					int i;
 					for (i = 0 ; i < options.size() ; i++) {
+						cout << reqGraph[index].get_first_requirement()->get_course_name() << endl;
+						cout << options[i] << endl; 
+						cout << endl;
 						if (reqGraph[index].get_first_requirement()->get_course_name() ==
 						   options[i]) {
 							// the index of the choice in the vector
@@ -85,6 +88,7 @@ int main(int argc, char ** argv){
 							options.erase(options.begin()+i);
 						}
 					}
+					cout << "Next line" << endl << endl;
 				}
 
 				for (index = 0 ; index < reqGraph.size() ; index++) {
@@ -207,6 +211,7 @@ int main(int argc, char ** argv){
 				error_message = "Missing " + to_string(choose_options[a])
 						+ " courses from any of the following: " +
 						choose_reqs[a];
+
 				break;
 			}
 		}

@@ -6,13 +6,21 @@ using namespace std;
 
 int main(int argc, char ** argv){
 	string line;
+	string error_message = "";
+
 	int credLimit;
+	int count = 1;
+
 	unordered_map<string, int> credTags;
+
 	vector<RequirementsLL> reqGraph;
+
 	// has as many elements as there are "CHOOSE" lines
 	vector<int> choose_options;
+	vector<string> choose_reqs;
+
 	ifstream reqFile(argv[1]);
-	int count = 1;
+
 	if(reqFile.is_open()){
 		while(getline(reqFile,line)){
 			if(line.substr(0,5) == "TOTAL"){
@@ -44,6 +52,8 @@ int main(int argc, char ** argv){
 				reqGraph.push_back(reqLL);
 			}else if(line.substr(0,6) == "CHOOSE"){
 				string classes = line.substr(7);
+				choose_reqs.push_back(classes);
+
 				char number = classes[0];
 				choose_options.push_back(number - '0');
 				classes = classes.substr(2);
@@ -67,7 +77,9 @@ int main(int argc, char ** argv){
 					for (i = 0 ; i < options.size() ; i++) {
 						if (reqGraph[index].get_first_requirement()->get_course_name() ==
 						   options[i]) {
+							// the index of the choice in the vector
 							reqGraph[index].get_first_requirement()->choose[0] = count;
+							// how many are needed at that index (value at index)
 							reqGraph[index].get_first_requirement()->choose[1] = number - '0';
 							options.erase(options.begin()+i);
 						}
@@ -146,16 +158,56 @@ int main(int argc, char ** argv){
 			while(graphIdx < reqGraph.size() && reqGraph[graphIdx].get_first_requirement()->get_course_name() != schedule[i].substr(classIdx,5)){
 				graphIdx++;
 			}
-			RequirementLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
-			if(myPtr.get_course_status() == "R"){
+			RequirementsLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
+			/*if(myPtr.get_course_status() == "R"){
 				while(myPtr.get_next_requirement().get_next_requirement()){
 					if(myPtr.get_next_requirement().get_course_name == )
 						myPtr = myPtr.get_next_requirement()
 				}
-			}
+			}*/
 			//cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
 			cout << graphIdx << endl;
 			classIdx += 6;
 		}
 	}
+
+	if (error_message != "") {
+		cout << error_message << endl;
+	} else {
+		cout << "You're good to go!" << endl;
+	}
 }
+
+
+/* This code goes where the class was accepted.
+   It checks to see if the class that was accepted
+   fulfills any CHOOSE requirements, and if so,
+   it marks down the number of that number which we
+   need by one (saved in choose_options). At the end,
+   I will check to see that all are marked down to zero. If not,
+   I will list the CHOOSE courses and how many are needed.
+
+if (myPtr->choose[1] != 0) {
+	choose_options[(myPtr->choose[0])-1] -= 1;
+}
+
+--------
+
+   This goes after all the classes are checked. If nothing was caught before,
+   it'll check all of the elements in the options vector and make sure they're
+   all zero. If even one of them is 1 or more, then we need that many more classes
+   from the (index+1)th CHOOSE statement in order to pass this requirement.
+   The assignment requires the course name(s) to be listed specifically, but we only
+   have to actually name one discrepancy.
+
+int a;
+for (a = 0 ; a < choose_options.size() ; a++) {
+	if (choose_options[a] != 0) {
+		error_message = "Missing " + to_string(choose_options[a])
+			        + " courses from any of the following: " +
+				choose_reqs[a]";
+		break;
+	}
+}
+
+		   			Will move this code. */

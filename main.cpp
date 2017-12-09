@@ -170,7 +170,7 @@ int main(int argc, char ** argv){
 					while(myPtr->get_next_requirement()){
 						if(find(takenClasses.begin(), takenClasses.end(), myPtr->get_next_requirement()->get_course_name()) == takenClasses.end()) {
 							preMet = false;
-							cout << "Prerequisite " << myPtr->get_next_requirement()->get_course_name() << " for " << reqGraph[graphIdx].get_first_requirement()->get_course_name() << " not yet taken"<< endl;
+						error_message = "Prerequisite " + myPtr->get_next_requirement()->get_course_name() + " for " + reqGraph[graphIdx].get_first_requirement()->get_course_name() + " not yet taken";
 							break;
 						}
 						myPtr = myPtr->get_next_requirement();
@@ -178,6 +178,17 @@ int main(int argc, char ** argv){
 				}
 			}
 			credCount += (offerings_graph[schedule[i].substr(classIdx,5)][0] - '0');
+			char semester_taken = schedule[i][0];
+			char semester_offered = offerings_graph[schedule[i].substr(classIdx,5)][2];
+
+			if (semester_taken != semester_offered and semester_offered != 'E') {
+				error_message = "Class " + schedule[i].substr(classIdx,5) +
+						" is not offered this semseter.";
+			}
+
+			if (graphIdx < reqGraph.size() && preMet && reqGraph[graphIdx].get_first_requirement()->choose[1] != 0) {
+				choose_options[(reqGraph[graphIdx].get_first_requirement()->choose[0])-1] -= 1;
+			}
 			//cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
 			//cout << "graphIdx: " << graphIdx << endl;
 			semesterClasses.push_back(schedule[i].substr(classIdx,5));
@@ -189,12 +200,31 @@ int main(int argc, char ** argv){
 		}
 	}
 
+	if (preMet) {
+		int a;
+		for (a = 0 ; a < choose_options.size() ; a++) {
+			if (choose_options[a] != 0) {
+				error_message = "Missing " + to_string(choose_options[a])
+						+ " courses from any of the following: " +
+						choose_reqs[a];
+				break;
+			}
+		}
+	}
+
+
 	if (error_message != "") {
+		cout << "Schedule is flawed." << endl << endl;
 		cout << error_message << endl;
 	} else {
 		cout << "You're good to go!" << endl;
 	}
 }
+
+
+
+// VVV IGNORE THESE THEY ARE TAKEN CARE OF VVV
+
 
 
 /* This code goes where the class was accepted.

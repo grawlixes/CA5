@@ -1,4 +1,5 @@
 #include <fstream>
+#include <algorithm>
 #include <unordered_map>
 #include "RequirementsLL.h"
 
@@ -137,6 +138,9 @@ int main(int argc, char ** argv){
 	}
 	int credCount;
 	bool preMet, mandatory, tagMet;
+	preMet = true;
+	mandatory = true;
+	tagMet = true;
 	vector<string> takenClasses;
 	for(int i = 0; i < schedule.size(); i++){
 		int classIdx = 6;
@@ -146,16 +150,22 @@ int main(int argc, char ** argv){
 			while(graphIdx < reqGraph.size() && reqGraph[graphIdx].get_first_requirement()->get_course_name() != schedule[i].substr(classIdx,5)){
 				graphIdx++;
 			}
-			RequirementLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
-			if(myPtr.get_course_status() == "R"){
-				while(myPtr.get_next_requirement().get_next_requirement()){
-					if(myPtr.get_next_requirement().get_course_name == )
-						myPtr = myPtr.get_next_requirement()
+			RequirementsLLNode* myPtr = reqGraph[graphIdx].get_first_requirement();
+			if(myPtr->get_course_status() == "R"){
+				while(myPtr->get_next_requirement()){
+					if(find(takenClasses.begin(), takenClasses.end(), myPtr->get_next_requirement()->get_course_name()) == takenClasses.end()) {
+						preMet = false;
+						cout << "Prerequisite " << myPtr->get_next_requirement()->get_course_name() << " for " << reqGraph[graphIdx].get_first_requirement()->get_course_name() << " not yet taken"<< endl;
+						break;
+					}
 				}
 			}
 			//cout << reqGraph[graphIdx].get_first_requirement()->get_course_name() << endl;
-			cout << graphIdx << endl;
+			//cout << "graphIdx: " << graphIdx << endl;
 			classIdx += 6;
+		}
+		if(!preMet){
+			break;
 		}
 	}
 }
